@@ -24,6 +24,8 @@
 -cp ../packages/filters/src
 # -lib openfl.geom
 -cp ../packages/geom/src
+# -lib openfl.globalization
+-cp ../packages/globalization/src
 # -lib openfl.graphics
 -cp ../packages/graphics/src
 # -lib openfl.input

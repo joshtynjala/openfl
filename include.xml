@@ -54,6 +54,7 @@
 	<source path="packages/filereference/src" />
 	<source path="packages/filters/src" />
 	<source path="packages/geom/src" />
+	<source path="packages/globalization/src" />
 	<source path="packages/graphics/src" />
 	<source path="packages/input/src" />
 	<source path="packages/loader/src" />
