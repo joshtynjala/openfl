@@ -24,7 +24,6 @@ jobs:
           haxelib install lime --quiet
           haxelib install utest --quiet
           haxelib install hxp --quiet
-          haxelib run hxp --install-hxp-alias
 
       - name: Setup environment
         run: |
@@ -36,7 +35,7 @@ jobs:
 
       - name: Run tests
         run: |
-          hxp test
+          haxelib run hxp test
 
   package-haxelib:
     runs-on: macos-10.15
