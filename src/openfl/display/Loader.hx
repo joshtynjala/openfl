@@ -672,7 +672,7 @@ class Loader extends DisplayObjectContainer
 	{
 		if (!__unloaded)
 		{
-			if (content != null && content.parent == this)
+			if (content != null && content.__parent == this)
 			{
 				__removeChild(content);
 			}
