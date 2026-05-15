@@ -239,7 +239,7 @@ class DisplayObjectContainer extends InteractiveObject
 			throw "Invalid index position " + index;
 		}
 
-		if (child.parent == this)
+		if (child.__parent == this)
 		{
 			if (__children[index] != child)
 			{
@@ -251,13 +251,13 @@ class DisplayObjectContainer extends InteractiveObject
 		}
 		else
 		{
-			if (child.parent != null)
+			if (child.__parent != null)
 			{
-				child.parent.__removeChild(child);
+				child.__parent.__removeChild(child);
 			}
 
 			__children.insert(index, child);
-			child.parent = this;
+			child.__parent = this;
 
 			var addedToStage = (stage != null && child.stage == null);
 
@@ -346,7 +346,7 @@ class DisplayObjectContainer extends InteractiveObject
 	{
 		while (child != this && child != null)
 		{
-			child = child.parent;
+			child = child.__parent;
 		}
 
 		return child == this;
@@ -479,7 +479,7 @@ class DisplayObjectContainer extends InteractiveObject
 
 	@:noCompletion private function __removeChild(child:DisplayObject):DisplayObject
 	{
-		if (child != null && child.parent == this)
+		if (child != null && child.__parent == this)
 		{
 			child.__setTransformDirty();
 			child.__setRenderDirty();
@@ -523,7 +523,7 @@ class DisplayObjectContainer extends InteractiveObject
 				child.__setStageReference(null);
 			}
 
-			child.parent = null;
+			child.__parent = null;
 			__children.remove(child);
 			__removedChildren.push(child);
 			child.__setTransformDirty();
@@ -663,7 +663,7 @@ class DisplayObjectContainer extends InteractiveObject
 	**/
 	public function setChildIndex(child:DisplayObject, index:Int):Void
 	{
-		if (index >= 0 && index <= __children.length && child.parent == this)
+		if (index >= 0 && index <= __children.length && child.__parent == this)
 		{
 			__children.remove(child);
 			__children.insert(index, child);
@@ -696,7 +696,7 @@ class DisplayObjectContainer extends InteractiveObject
 	**/
 	public function swapChildren(child1:DisplayObject, child2:DisplayObject):Void
 	{
-		if (child1.parent == this && child2.parent == this)
+		if (child1.__parent == this && child2.__parent == this)
 		{
 			var index1 = __children.indexOf(child1);
 			var index2 = __children.indexOf(child2);

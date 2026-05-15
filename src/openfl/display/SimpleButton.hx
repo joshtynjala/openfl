@@ -455,9 +455,9 @@ class SimpleButton extends InteractiveObject
 			__currentState.__renderParent = null;
 		}
 
-		if (value != null && value.parent != null)
+		if (value != null && value.__parent != null)
 		{
-			value.parent.__removeChild(value);
+			value.__parent.__removeChild(value);
 		}
 
 		#if (js && html5)

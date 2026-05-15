@@ -74,6 +74,7 @@ import openfl.text.engine.FontWeight;
 @:fileXml('tags="haxe,release"')
 @:noDebug
 #end
+@:access(openfl.display.DisplayObject)
 @:access(openfl.display.DisplayObjectContainer)
 @:access(openfl.events.Event)
 class StageText extends EventDispatcher
@@ -499,7 +500,7 @@ class StageText extends EventDispatcher
 		}
 		if (__textField.stage != null)
 		{
-			__textField.parent.__removeChild(__textField);
+			__textField.__parent.__removeChild(__textField);
 			__complete = false;
 		}
 		if (value != null)
@@ -638,7 +639,7 @@ class StageText extends EventDispatcher
 	**/
 	public function assignFocus():Void
 	{
-		if (__textField.parent == null)
+		if (__textField.__parent == null)
 		{
 			return;
 		}

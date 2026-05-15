@@ -1269,9 +1269,9 @@ class InteractiveObject extends DisplayObject
 		{
 			stack.push(this);
 
-			if (parent != null)
+			if (__parent != null)
 			{
-				parent.__getInteractive(stack);
+				__parent.__getInteractive(stack);
 			}
 		}
 
