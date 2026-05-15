@@ -358,7 +358,7 @@ class DisplayObjectRenderer extends EventDispatcher
 						updateTransform = true;
 						break;
 					}
-					current = current.parent;
+					current = current.__parent;
 				}
 			}
 

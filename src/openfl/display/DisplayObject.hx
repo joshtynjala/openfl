@@ -630,6 +630,8 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable #if (open
 	**/
 	public var opaqueBackground:Null<Int>;
 
+	@:noCompletion private var __parent:DisplayObjectContainer;
+
 	/**
 		Indicates the DisplayObjectContainer object that contains this display
 		object. Use the `parent` property to specify a relative path to
@@ -650,7 +652,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable #if (open
 
 		@see [Traversing the display list](https://books.openfl.org/openfl-developers-guide/display-programming/working-with-display-objects/traversing-the-display-list.html)
 	**/
-	public var parent(default, null):DisplayObjectContainer;
+	public var parent(get, never):DisplayObjectContainer;
 
 	@:noCompletion private var __root:DisplayObject;
 
@@ -1078,6 +1080,9 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable #if (open
 				get: untyped #if haxe4 js.Syntax.code #else __js__ #end ("function () { return this.get_name (); }"),
 				set: untyped #if haxe4 js.Syntax.code #else __js__ #end ("function (v) { return this.set_name (v); }")
 			},
+			"parent": {
+				get: untyped #if haxe4 js.Syntax.code #else __js__ #end ("function () { return this.get_parent (); }")
+			},
 			"root": {
 				get: untyped #if haxe4 js.Syntax.code #else __js__ #end ("function () { return this.get_root (); }")
 			},
@@ -1344,7 +1349,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable #if (open
 	**/
 	public function hitTestObject(obj:DisplayObject):Bool
 	{
-		if (obj != null && obj.parent != null && parent != null)
+		if (obj != null && obj.__parent != null && __parent != null)
 		{
 			var currentBounds = getBounds(this);
 			var targetBounds = obj.getBounds(this);
@@ -1525,7 +1530,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable #if (open
 
 	@:noCompletion private override function __dispatchEvent(event:Event):Bool
 	{
-		var parent = event.bubbles ? this.parent : null;
+		var parent = event.bubbles ? this.__parent : null;
 		var atTargetResult = super.__dispatchEvent(event);
 
 		if (event.__isCanceled)
@@ -1557,18 +1562,18 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable #if (open
 		}
 
 		var capturingResult = true;
-		if (parent != null)
+		if (__parent != null)
 		{
 			event.eventPhase = CAPTURING_PHASE;
 
-			if (parent == stage)
+			if (__parent == stage)
 			{
-				capturingResult = parent.__dispatch(event);
+				capturingResult = __parent.__dispatch(event);
 			}
 			else
 			{
 				var stack = __tempStack.get();
-				var parent = parent;
+				var parent = __parent;
 				var i = 0;
 
 				while (parent != null)
@@ -1693,7 +1698,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable #if (open
 			var list:Array<DisplayObject> = [];
 			var current = this;
 
-			if (parent == null)
+			if (__parent == null)
 			{
 				__update(true, false);
 			}
@@ -1702,7 +1707,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable #if (open
 				while (current != stage)
 				{
 					list.push(current);
-					current = current.parent;
+					current = current.__parent;
 
 					if (current == null) break;
 				}
@@ -1780,7 +1785,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable #if (open
 
 	@:noCompletion private function __setParentRenderDirty():Void
 	{
-		var renderParent = __renderParent != null ? __renderParent : parent;
+		var renderParent = __renderParent != null ? __renderParent : __parent;
 		if (renderParent != null && !renderParent.__renderDirty)
 		{
 			renderParent.__renderDirty = true;
@@ -1827,13 +1832,13 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable #if (open
 
 		if (stage != null)
 		{
-			if (Lib.current == this && parent == stage)
+			if (Lib.current == this && __parent == stage)
 			{
 				__root = this;
 			}
-			else if (parent != null)
+			else if (__parent != null)
 			{
-				__root = parent.__root;
+				__root = __parent.__root;
 			}
 			else if (__renderParent != null)
 			{
@@ -1873,7 +1878,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable #if (open
 
 	@:noCompletion private function __update(transformOnly:Bool, updateChildren:Bool):Void
 	{
-		var renderParent = __renderParent != null ? __renderParent : parent;
+		var renderParent = __renderParent != null ? __renderParent : __parent;
 		if (__isMask && renderParent == null) renderParent = __maskTarget;
 		__renderable = (__visible && __scaleX != 0 && __scaleY != 0 && !__isMask && (renderParent == null || !renderParent.__isMask));
 		__updateTransforms();
@@ -2009,11 +2014,11 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable #if (open
 			__renderTransform = new Matrix();
 		}
 
-		var renderParent = __renderParent != null ? __renderParent : parent;
+		var renderParent = __renderParent != null ? __renderParent : __parent;
 
-		if (!overrided && parent != null)
+		if (!overrided && __parent != null)
 		{
-			__calculateAbsoluteTransform(local, parent.__worldTransform, __worldTransform);
+			__calculateAbsoluteTransform(local, __parent.__worldTransform, __worldTransform);
 		}
 		else
 		{
@@ -2279,6 +2284,11 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable #if (open
 	@:noCompletion private function set_name(value:String):String
 	{
 		return __name = value;
+	}
+
+	@:noCompletion private function get_parent():DisplayObjectContainer
+	{
+		return __parent;
 	}
 
 	@:noCompletion private function get_root():DisplayObject

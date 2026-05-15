@@ -1470,7 +1470,7 @@ class Stage extends DisplayObjectContainer #if lime implements IModule #end
 			}
 			else
 			{
-				var current:DisplayObjectContainer = __mouseOverTarget.parent;
+				var current:DisplayObjectContainer = __mouseOverTarget.__parent;
 				while (current != null)
 				{
 					// parents get mostly similar checks to __mouseOverTarget,
@@ -1480,7 +1480,7 @@ class Stage extends DisplayObjectContainer #if lime implements IModule #end
 						__onMouse(null, __untransformedMouseX, __untransformedMouseY, 0);
 						break;
 					}
-					current = current.parent;
+					current = current.__parent;
 				}
 			}
 		}
@@ -1640,7 +1640,7 @@ class Stage extends DisplayObjectContainer #if lime implements IModule #end
 
 	@:noCompletion private function __drag(mouse:Point):Void
 	{
-		var parent = __dragObject.parent;
+		var parent = __dragObject.__parent;
 		if (parent != null)
 		{
 			parent.__getWorldTransform().__transformInversePoint(mouse);
@@ -1874,7 +1874,7 @@ class Stage extends DisplayObjectContainer #if lime implements IModule #end
 								// if the current focus is not in the tab stack,
 								// try to find the nearest object in the display
 								// list that is in the stack
-								var currentParent = current.parent;
+								var currentParent = current.__parent;
 								if (currentParent != null && currentParent.tabChildren)
 								{
 									var currentIndex = currentParent.__children.indexOf(current);
@@ -3811,7 +3811,7 @@ class Stage extends DisplayObjectContainer #if lime implements IModule #end
 			{
 				var mouse = Point.__pool.get();
 				mouse.setTo(mouseX, mouseY);
-				var parent = __dragObject.parent;
+				var parent = __dragObject.__parent;
 
 				if (parent != null)
 				{
@@ -3857,7 +3857,7 @@ class Stage extends DisplayObjectContainer #if lime implements IModule #end
 		while (updateQueue.length != 0)
 		{
 			var displayObject = updateQueue.shift();
-			var parentDisplayObject = displayObject.parent;
+			var parentDisplayObject = displayObject.__parent;
 			if (parentDisplayObject != null && parentDisplayObject.__updateRequired == true && parentDisplayObject != this)
 			{
 				parentDisplayObject.__update(transformOnly, false);
