@@ -181,7 +181,8 @@ jobs:
 
       - name: Rebuild Lime
         run: |
-          haxelib run lime rebuild tools
+          haxelib path lime
+          haxelib run lime rebuild tools -eval
           haxelib run lime rebuild hl
           haxelib run lime config AIR_SDK ${{ env.AIR_HOME }}
 
